@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using TimelyServerApp.Viewmodels;
 
 namespace TimelyServerApp.Entities
 {
@@ -19,6 +20,6 @@ namespace TimelyServerApp.Entities
 
         public string Note { get; set; }
 
-        public ICollection<ProjectTag> ProjectTags { get; set; }
+        public ICollection<Tag> Tags { get; set; }
     }
 }

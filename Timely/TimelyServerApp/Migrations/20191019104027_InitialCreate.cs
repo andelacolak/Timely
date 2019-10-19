@@ -26,60 +26,33 @@ namespace TimelyServerApp.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 100, nullable: true)
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
+                    ProjectId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tags", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProjectTags",
-                columns: table => new
-                {
-                    ProjectTagId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProjectId = table.Column<int>(nullable: false),
-                    TagId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProjectTags", x => x.ProjectTagId);
                     table.ForeignKey(
-                        name: "FK_ProjectTags_Projects_ProjectId",
+                        name: "FK_Tags_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProjectTags_Tags_TagId",
-                        column: x => x.TagId,
-                        principalTable: "Tags",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectTags_ProjectId",
-                table: "ProjectTags",
+                name: "IX_Tags_ProjectId",
+                table: "Tags",
                 column: "ProjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProjectTags_TagId",
-                table: "ProjectTags",
-                column: "TagId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ProjectTags");
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Projects");
-
-            migrationBuilder.DropTable(
-                name: "Tags");
         }
     }
 }

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TimelyServerApp.Entities;
 using TimelyServerApp.Repositories;
 using TimelyServerApp.Viewmodels;
 
@@ -14,9 +13,9 @@ namespace TimelyServerApp.Controllers
     [Route("api/projects")]
     public class ProjectController: Controller
     {
-        private readonly IRepository<Project> _dataRepository;
+        private readonly IRepository<Entities.Project> _dataRepository;
 
-        public ProjectController(IRepository<Project> dataRepository)
+        public ProjectController(IRepository<Entities.Project> dataRepository)
         {
             _dataRepository = dataRepository;
         }
@@ -24,17 +23,13 @@ namespace TimelyServerApp.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            IEnumerable<ProjectModel> projects = _dataRepository.GetAll()
-                .Include(x => x.ProjectTags)
-                .ThenInclude(x => x.Tag)
-                .Select(x => new ProjectModel 
-                { 
+            IEnumerable<Project> projects = _dataRepository.GetAll()
+                .Include(x => x.Tags)
+                .Select(x => new Project
+                {
                     Name = x.Name,
                     Note = x.Note,
-                    Tags = x.ProjectTags.Select(y => new TagModel 
-                    {
-                        Name = y.Tag.Name
-                    })
+                    TagNames = x.Tags.Select(y => y.Name)
                 });
             return Ok(projects);
         }
@@ -43,7 +38,7 @@ namespace TimelyServerApp.Controllers
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(int id)
         {
-            Project project = _dataRepository.Get(id);
+            Entities.Project project = _dataRepository.Get(id);
 
             if (project == null)
                 return NotFound("The Project record couldn't be found.");
@@ -53,7 +48,7 @@ namespace TimelyServerApp.Controllers
 
         // POST: api/project
         [HttpPost]
-        public IActionResult Post([FromBody] Project project)
+        public IActionResult Post([FromBody] Entities.Project project)
         {
             if (project == null)
                 return BadRequest("Project is null.");
@@ -68,14 +63,14 @@ namespace TimelyServerApp.Controllers
 
         // PUT: api/project/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Project project)
+        public IActionResult Put(int id, [FromBody] Entities.Project project)
         {
             if (project == null)
             {
                 return BadRequest("Project is null.");
             }
 
-            Project projectToUpdate = _dataRepository.Get(id);
+            Entities.Project projectToUpdate = _dataRepository.Get(id);
 
             if (projectToUpdate == null)
                 return NotFound("The Project record couldn't be found.");
@@ -88,7 +83,7 @@ namespace TimelyServerApp.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            Project project = _dataRepository.Get(id);
+            Entities.Project project = _dataRepository.Get(id);
 
             if (project == null)
                 return NotFound("The Employee record couldn't be found.");

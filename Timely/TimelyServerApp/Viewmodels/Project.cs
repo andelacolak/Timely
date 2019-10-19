@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace TimelyServerApp.Viewmodels
 {
-    public class ProjectModel
+    public class Project
     {
         public string Name { get; set; }
 
         public string Note { get; set; }
 
-        public IEnumerable<TagModel> Tags { get; set; }
+        public IEnumerable<string> TagNames { get; set; }
     }
 }

@@ -19,58 +19,42 @@ namespace TimelyServerApp.Migrations
 
             migrationBuilder.InsertData(
                 table: "Tags",
-                columns: new[] { "Id", "Name" },
+                columns: new[] { "Id", "Name", "ProjectId" },
                 values: new object[,]
                 {
-                    { 1, "design" },
-                    { 2, "development" },
-                    { 3, "management" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "ProjectTags",
-                columns: new[] { "ProjectTagId", "ProjectId", "TagId" },
-                values: new object[,]
-                {
-                    { 1, 1, 1 },
-                    { 5, 4, 1 },
-                    { 2, 1, 2 },
-                    { 3, 2, 3 },
-                    { 4, 4, 3 }
+                    { 1, "design", 1 },
+                    { 14, "design", 1 },
+                    { 2, "development", 3 },
+                    { 3, "management", 4 }
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DeleteData(
-                table: "ProjectTags",
-                keyColumn: "ProjectTagId",
-                keyValue: 1);
-
-            migrationBuilder.DeleteData(
-                table: "ProjectTags",
-                keyColumn: "ProjectTagId",
+                table: "Projects",
+                keyColumn: "Id",
                 keyValue: 2);
 
             migrationBuilder.DeleteData(
-                table: "ProjectTags",
-                keyColumn: "ProjectTagId",
-                keyValue: 3);
+                table: "Tags",
+                keyColumn: "Id",
+                keyValue: 1);
 
             migrationBuilder.DeleteData(
-                table: "ProjectTags",
-                keyColumn: "ProjectTagId",
-                keyValue: 4);
+                table: "Tags",
+                keyColumn: "Id",
+                keyValue: 2);
 
             migrationBuilder.DeleteData(
-                table: "ProjectTags",
-                keyColumn: "ProjectTagId",
-                keyValue: 5);
-
-            migrationBuilder.DeleteData(
-                table: "Projects",
+                table: "Tags",
                 keyColumn: "Id",
                 keyValue: 3);
+
+            migrationBuilder.DeleteData(
+                table: "Tags",
+                keyColumn: "Id",
+                keyValue: 14);
 
             migrationBuilder.DeleteData(
                 table: "Projects",
@@ -80,27 +64,12 @@ namespace TimelyServerApp.Migrations
             migrationBuilder.DeleteData(
                 table: "Projects",
                 keyColumn: "Id",
-                keyValue: 2);
+                keyValue: 3);
 
             migrationBuilder.DeleteData(
                 table: "Projects",
                 keyColumn: "Id",
                 keyValue: 4);
-
-            migrationBuilder.DeleteData(
-                table: "Tags",
-                keyColumn: "Id",
-                keyValue: 1);
-
-            migrationBuilder.DeleteData(
-                table: "Tags",
-                keyColumn: "Id",
-                keyValue: 2);
-
-            migrationBuilder.DeleteData(
-                table: "Tags",
-                keyColumn: "Id",
-                keyValue: 3);
         }
     }
 }

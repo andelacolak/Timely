@@ -64,60 +64,6 @@ namespace TimelyServerApp.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TimelyServerApp.Entities.ProjectTag", b =>
-                {
-                    b.Property<int>("ProjectTagId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProjectTagId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("ProjectTags");
-
-                    b.HasData(
-                        new
-                        {
-                            ProjectTagId = 1,
-                            ProjectId = 1,
-                            TagId = 1
-                        },
-                        new
-                        {
-                            ProjectTagId = 2,
-                            ProjectId = 1,
-                            TagId = 2
-                        },
-                        new
-                        {
-                            ProjectTagId = 3,
-                            ProjectId = 2,
-                            TagId = 3
-                        },
-                        new
-                        {
-                            ProjectTagId = 4,
-                            ProjectId = 4,
-                            TagId = 3
-                        },
-                        new
-                        {
-                            ProjectTagId = 5,
-                            ProjectId = 4,
-                            TagId = 1
-                        });
-                });
-
             modelBuilder.Entity("TimelyServerApp.Entities.Tag", b =>
                 {
                     b.Property<int>("Id")
@@ -126,10 +72,16 @@ namespace TimelyServerApp.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Tags");
 
@@ -137,31 +89,34 @@ namespace TimelyServerApp.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "design"
+                            Name = "design",
+                            ProjectId = 1
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "design",
+                            ProjectId = 1
                         },
                         new
                         {
                             Id = 2,
-                            Name = "development"
+                            Name = "development",
+                            ProjectId = 3
                         },
                         new
                         {
                             Id = 3,
-                            Name = "management"
+                            Name = "management",
+                            ProjectId = 4
                         });
                 });
 
-            modelBuilder.Entity("TimelyServerApp.Entities.ProjectTag", b =>
+            modelBuilder.Entity("TimelyServerApp.Entities.Tag", b =>
                 {
                     b.HasOne("TimelyServerApp.Entities.Project", "Project")
-                        .WithMany()
+                        .WithMany("Tags")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TimelyServerApp.Entities.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

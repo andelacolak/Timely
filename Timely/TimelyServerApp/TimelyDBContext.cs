@@ -16,24 +16,14 @@ namespace TimelyServerApp
 
         public DbSet<Project> Projects { get; set; }
 
-        public DbSet<ProjectTag> ProjectTags { get; set; }
-
         public DbSet<Tag> Tags { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder) {
-
-            modelBuilder.Entity<ProjectTag>()
-                .HasKey(x => new { x.ProjectId, x.TagId });
-
-            modelBuilder.Entity<ProjectTag>()
-                .HasOne(x => x.Project)
-                .WithMany(y => y.ProjectTags)
-                .HasForeignKey(y => y.ProjectId);
-
-            modelBuilder.Entity<ProjectTag>()
-                .HasOne(x => x.Tag)
-                .WithMany(y => y.ProjectTags)
-                .HasForeignKey(y => y.TagId);
+        protected override void OnModelCreating(ModelBuilder modelBuilder) 
+        {
+            modelBuilder.Entity<Tag>()
+            .HasOne(s => s.Project)
+            .WithMany(g => g.Tags)
+            .HasForeignKey(s => s.ProjectId);
 
             modelBuilder.Entity<Project>().HasData(new Project
             {
@@ -57,45 +47,26 @@ namespace TimelyServerApp
                 Note = "sometimes by accident, sometimes on purpose (injected humour and the like)"
             });
 
-            modelBuilder.Entity<Tag>().HasData(new Tag 
+            modelBuilder.Entity<Tag>().HasData(new Tag
             {
                 Id = 1,
-                Name = "design"
+                Name = "design",
+                ProjectId = 1
+            }, new Tag
+            {
+                Id = 14,
+                Name = "design2",
+                ProjectId = 1
             }, new Tag
             {
                 Id = 2,
-                Name = "development"
+                Name = "development",
+                ProjectId = 3
             }, new Tag
             {
                 Id = 3,
-                Name = "management"
-            });
-
-            modelBuilder.Entity<ProjectTag>().HasData(new ProjectTag 
-            { 
-                ProjectTagId = 1,
-                ProjectId = 1,
-                TagId = 1
-            }, new ProjectTag
-            {
-                ProjectTagId = 2,
-                ProjectId = 1,
-                TagId = 2
-            }, new ProjectTag
-            {
-                ProjectTagId = 3,
-                ProjectId = 2,
-                TagId = 3
-            }, new ProjectTag
-            {
-                ProjectTagId = 4,
-                ProjectId = 4,
-                TagId = 3
-            }, new ProjectTag
-            {
-                ProjectTagId = 5,
-                ProjectId = 4,
-                TagId = 1
+                Name = "management",
+                ProjectId = 4
             });
         }
     }

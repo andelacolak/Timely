@@ -13,9 +13,12 @@ namespace TimelyServerApp.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [Required]
         [MaxLength(100)]
         public string Name { get; set; }
 
-        public ICollection<ProjectTag> ProjectTags { get; set; }
+        public int ProjectId { get; set; }
+
+        public Project Project { get; set; }
     }
 }

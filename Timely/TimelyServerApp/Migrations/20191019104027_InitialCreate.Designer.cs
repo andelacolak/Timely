@@ -9,7 +9,7 @@ using TimelyServerApp;
 namespace TimelyServerApp.Migrations
 {
     [DbContext(typeof(TimelyDBContext))]
-    [Migration("20191018185853_InitialCreate")]
+    [Migration("20191019104027_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,28 +40,6 @@ namespace TimelyServerApp.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("TimelyServerApp.Entities.ProjectTag", b =>
-                {
-                    b.Property<int>("ProjectTagId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProjectTagId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("ProjectTags");
-                });
-
             modelBuilder.Entity("TimelyServerApp.Entities.Tag", b =>
                 {
                     b.Property<int>("Id")
@@ -70,25 +48,25 @@ namespace TimelyServerApp.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("TimelyServerApp.Entities.ProjectTag", b =>
+            modelBuilder.Entity("TimelyServerApp.Entities.Tag", b =>
                 {
                     b.HasOne("TimelyServerApp.Entities.Project", "Project")
-                        .WithMany()
+                        .WithMany("Tags")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TimelyServerApp.Entities.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TimelyServerApp.Viewmodels
 {
-    public class TagModel
+    public class Tag
     {
         public string Name { get; set; }
     }
