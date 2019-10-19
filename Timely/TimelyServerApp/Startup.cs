@@ -23,6 +23,8 @@ namespace TimelyServerApp
             Configuration = configuration;
         }
 
+        readonly string AllowSpecificOrigins = "_allowSpecificOrigins";
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -32,6 +34,17 @@ namespace TimelyServerApp
 
             services.AddScoped<IRepository<Project>, ProjectRepository>();
             services.AddScoped<IRepository<Tag>, TagRepository>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(AllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000")
+                                        .AllowAnyHeader()
+                                        .AllowAnyMethod();
+                });
+            });
 
             services.AddControllers();
         }
@@ -49,6 +62,8 @@ namespace TimelyServerApp
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors(AllowSpecificOrigins);
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,22 +1,21 @@
 import React from 'react';
-import { getAllProjects } from '../Services/ProjectService'
-import { Button, Media, Alert, Table, Card, Container, Row, Col } from 'react-bootstrap'
+import { Button, Card, Container, Row, Col } from 'react-bootstrap';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../Assets/Styles/custom.css'
 
-interface IData {
+interface IProject {
     name: string,
-    tags?: Array<string>,
+    tagNames?: Array<string>,
     note?: string,
-    isLoading: boolean
 }
 
 interface IState {
     isLoading: boolean,
-    projects: Array<IData>
+    projects: Array<IProject>
 }
 
-class Home extends React.Component<any, any> {
+class Home extends React.Component<any, IState> {
     constructor( props : any ) {
         super(props)
         this.state = {
@@ -26,13 +25,14 @@ class Home extends React.Component<any, any> {
     }
 
     componentDidMount() {
-        getAllProjects()
-        .then(response => {
-            this.setState({
-                projects: response,
-                isLoading: false
+        axios.get(`http://localhost:50430/api/projects`)
+        .then(projects => {
+            console.log(projects.data);
+            this.setState({ 
+                isLoading: false,
+                projects: projects.data 
             });
-        })
+        }).catch(error => console.log(error))
     }
 
     render() {
@@ -43,14 +43,13 @@ class Home extends React.Component<any, any> {
         return ( [
             <Container>
                 <Row> {
-                    this.state.projects.map((project: IData) => {
-                        //return <Button variant="outline-secondary" key={project.name}>{project.name}</Button>
+                    this.state.projects.map((project: IProject) => {
                         return  <Col>
                             <Card style={{ width: '18rem' }}>
                                 <Card.Body className="dark-text">
                                 <Card.Title>{project.name}</Card.Title>
-                                { project.tags ? 
-                                    project.tags.map(tag => {
+                                { project.tagNames ? 
+                                    project.tagNames.map(tag => {
                                         return <Card.Subtitle className="mb-2 text-muted">#{tag}</Card.Subtitle> 
                                     
                                 }) : null
