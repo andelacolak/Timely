@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using TimelyServerApp.Entities;
+using TimelyServerApp.Repositories;
 
 namespace TimelyServerApp
 {
@@ -28,6 +30,9 @@ namespace TimelyServerApp
         {
             services.AddDbContext<TimelyDBContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:DefaultConnection"]));
 
+            services.AddScoped<IRepository<Project>, ProjectRepository>();
+            services.AddScoped<IRepository<Tag>, TagRepository>();
+
             services.AddControllers();
         }
 
@@ -39,7 +44,7 @@ namespace TimelyServerApp
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

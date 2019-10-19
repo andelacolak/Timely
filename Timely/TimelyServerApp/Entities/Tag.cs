@@ -15,5 +15,7 @@ namespace TimelyServerApp.Entities
 
         [MaxLength(100)]
         public string Name { get; set; }
+
+        public ICollection<ProjectTag> ProjectTags { get; set; }
     }
 }

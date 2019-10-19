@@ -21,6 +21,20 @@ namespace TimelyServerApp
         public DbSet<Tag> Tags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
+
+            modelBuilder.Entity<ProjectTag>()
+                .HasKey(x => new { x.ProjectId, x.TagId });
+
+            modelBuilder.Entity<ProjectTag>()
+                .HasOne(x => x.Project)
+                .WithMany(y => y.ProjectTags)
+                .HasForeignKey(y => y.ProjectId);
+
+            modelBuilder.Entity<ProjectTag>()
+                .HasOne(x => x.Tag)
+                .WithMany(y => y.ProjectTags)
+                .HasForeignKey(y => y.TagId);
+
             modelBuilder.Entity<Project>().HasData(new Project
             {
                 Id = 1,

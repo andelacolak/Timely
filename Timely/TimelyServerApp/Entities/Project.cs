@@ -18,5 +18,7 @@ namespace TimelyServerApp.Entities
         public string Name { get; set; }
 
         public string Note { get; set; }
+
+        public ICollection<ProjectTag> ProjectTags { get; set; }
     }
 }
