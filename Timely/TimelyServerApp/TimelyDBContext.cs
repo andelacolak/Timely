@@ -41,64 +41,47 @@ namespace TimelyServerApp
                 .WithMany(ws => ws.WorkSessionTags)
                 .HasForeignKey(ws => ws.TagId);
 
-            //modelBuilder.Entity<Project>().HasData(new Project
-            //{
-            //    Id = 1,
-            //    Name = "Project name 1",
-            //    Note = "This is the first project"
-            //}, new Project
-            //{
-            //    Id = 2,
-            //    Name = "Project name 2",
-            //    Note = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries"
-            //}, new Project
-            //{
-            //    Id = 3,
-            //    Name = "Project name 3",
-            //    Note = "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout"
-            //}, new Project
-            //{
-            //    Id = 4,
-            //    Name = "Project name 4",
-            //    Note = "sometimes by accident, sometimes on purpose (injected humour and the like)"
-            //});
+            modelBuilder.Entity<Project>().HasData(new Project
+            {
+                Id = 1,
+                Name = "Project name 1",
+                Note = "This is the first project"
+            }, new Project
+            {
+                Id = 2,
+                Name = "Project name 2",
+                Note = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries"
+            }, new Project
+            {
+                Id = 3,
+                Name = "Project name 3",
+                Note = "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout"
+            }, new Project
+            {
+                Id = 4,
+                Name = "Project name 4",
+                Note = "sometimes by accident, sometimes on purpose (injected humour and the like)"
+            });
 
-            //modelBuilder.Entity<ProjectTag>().HasData(new ProjectTag
-            //{
-            //    Id = 1,
-            //    Name = "design",
-            //    ProjectId = 1
-            //}, new ProjectTag
-            //{
-            //    Id = 14,
-            //    Name = "design2",
-            //    ProjectId = 1
-            //}, new ProjectTag
-            //{
-            //    Id = 2,
-            //    Name = "development",
-            //    ProjectId = 3
-            //}, new ProjectTag
-            //{
-            //    Id = 3,
-            //    Name = "management",
-            //    ProjectId = 4
-            //});
+            modelBuilder.Entity<WorkSession>().HasData(new WorkSession
+            {
+                Id = 1,
+                StartDate = DateTime.Now,
+                Description = "This is seeded work session",
+                ProjectId = 1
+            });
 
-            //modelBuilder.Entity<WorkSession>().HasData(new WorkSession
-            //{
-            //    Id = 1,
-            //    StartDate = DateTime.Now,
-            //    ProjectId = 1,
-            //    Description = "This is work session description"
-            //});
+            modelBuilder.Entity<Tag>().HasData(new Tag
+            {
+                Id = 1,
+                Name = "design"
+            });
 
-            //modelBuilder.Entity<WorkSessionTag>().HasData(new WorkSessionTag
-            //{
-            //    Id = 1,
-            //    Name = "development",
-            //    WorkSessionId = 1
-            //});
+            modelBuilder.Entity<WorkSessionTag>().HasData(new WorkSessionTag
+            {
+                TagId = 1,
+                WorkSessionId = 1
+            });
         }
     }
 }
