@@ -17,8 +17,6 @@ namespace TimelyServerApp.Entities
         [MaxLength(100)]
         public string Name { get; set; }
 
-        public int ProjectId { get; set; }
-
-        public Project Project { get; set; }
+        public ICollection< WorkSessionTag> WorkSessionTags { get; set; }
     }
 }

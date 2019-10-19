@@ -33,7 +33,6 @@ namespace TimelyServerApp
             services.AddDbContext<TimelyDBContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:DefaultConnection"]));
 
             services.AddScoped<IRepository<Project>, ProjectRepository>();
-            services.AddScoped<IRepository<Tag>, TagRepository>();
 
             services.AddCors(options =>
             {

@@ -24,12 +24,10 @@ namespace TimelyServerApp.Controllers
         public IActionResult Get()
         {
             IEnumerable<Project> projects = _dataRepository.GetAll()
-                .Include(x => x.Tags)
                 .Select(x => new Project
                 {
                     Name = x.Name,
-                    Note = x.Note,
-                    TagNames = x.Tags.Select(y => y.Name)
+                    Note = x.Note
                 });
             return Ok(projects);
         }

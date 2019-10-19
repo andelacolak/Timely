@@ -6,8 +6,7 @@ import '../Assets/Styles/custom.css'
 
 interface IProject {
     name: string,
-    tagNames?: Array<string>,
-    note?: string,
+    note?: string
 }
 
 interface IState {
@@ -27,7 +26,6 @@ class Home extends React.Component<any, IState> {
     componentDidMount() {
         axios.get(`http://localhost:50430/api/projects`)
         .then(projects => {
-            console.log(projects.data);
             this.setState({ 
                 isLoading: false,
                 projects: projects.data 
@@ -48,12 +46,12 @@ class Home extends React.Component<any, IState> {
                             <Card style={{ width: '18rem' }}>
                                 <Card.Body className="dark-text">
                                 <Card.Title>{project.name}</Card.Title>
-                                { project.tagNames ? 
+                                {/* { project.tagNames ? 
                                     project.tagNames.map(tag => {
                                         return <Card.Subtitle className="mb-2 text-muted">#{tag}</Card.Subtitle> 
                                     
                                 }) : null
-                            } 
+                                }  */}
                                 <Card.Text className="dark-text text-md">
                                     {project.note}
                                 </Card.Text>

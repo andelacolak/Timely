@@ -20,6 +20,6 @@ namespace TimelyServerApp.Entities
 
         public string Note { get; set; }
 
-        public ICollection<Tag> Tags { get; set; }
+        public ICollection<WorkSession> WorkSessions { get; set; }
     }
 }
