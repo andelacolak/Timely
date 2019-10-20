@@ -35,7 +35,7 @@ namespace TimelyServerApp.Repositories
 
         public IQueryable<Project> GetAll()
         {
-            return _timelyDBContext.Projects; ;
+            return _timelyDBContext.Projects;
         }
 
         public void Update(Project dbEntity, Project entity)

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Card, Container, Row, Col } from 'react-bootstrap';
+import { Card, Container, Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
+import LogButton from './LogButton'
 import 'bootstrap/dist/css/bootstrap.css';
 import '../Assets/Styles/custom.css'
 
@@ -11,7 +12,8 @@ interface IProject {
 
 interface IState {
     isLoading: boolean,
-    projects: Array<IProject>
+    projects: Array<IProject>,
+    clickedIndex?: number
 }
 
 class Home extends React.Component<any, IState> {
@@ -19,7 +21,8 @@ class Home extends React.Component<any, IState> {
         super(props)
         this.state = {
             isLoading: true,
-            projects: []
+            projects: [],
+            clickedIndex: undefined
         }
     }
 
@@ -29,11 +32,24 @@ class Home extends React.Component<any, IState> {
             this.setState({ 
                 isLoading: false,
                 projects: projects.data 
+                
             });
         }).catch(error => console.log(error))
     }
 
+    // WorkSession = (index: number)  => {
+    //     this.setState({activeButtonIndex: this.state.activeButtonIndex ? undefined : index});
+
+    //     console.log(this.state.activeButtonIndex, index);
+    // }
+
+    clickTrigger = (index?: number) => {
+        this.setState({clickedIndex: index});
+    }
+
     render() {
+        let index = 0;
+
         if (this.state.isLoading) {
             return null;
           }
@@ -42,20 +58,23 @@ class Home extends React.Component<any, IState> {
             <Container>
                 <Row> {
                     this.state.projects.map((project: IProject) => {
-                        return  <Col>
+
+                        index ++;
+                        
+                        return  <Col key={index}>
                             <Card style={{ width: '18rem' }}>
                                 <Card.Body className="dark-text">
-                                <Card.Title>{project.name}</Card.Title>
-                                {/* { project.tagNames ? 
-                                    project.tagNames.map(tag => {
-                                        return <Card.Subtitle className="mb-2 text-muted">#{tag}</Card.Subtitle> 
-                                    
-                                }) : null
-                                }  */}
-                                <Card.Text className="dark-text text-md">
-                                    {project.note}
-                                </Card.Text>
-                                <Button variant="outline-secondary">Log time</Button>
+                                    <Card.Title>{project.name}</Card.Title>
+                                    <Card.Text className="dark-text text-md">
+                                        {project.note}
+                                    </Card.Text>
+                                    {/* <Button variant="outline-secondary" 
+                                        onClick = {() => this.WorkSession(index)}
+                                         disabled = {this.state.activeButtonIndex === index || this.state.activeButtonIndex === undefined ? 
+                                         false : true}>Log time</Button> */}
+                                    <LogButton index = {index} 
+                                        clickedIndex = {this.state.clickedIndex} 
+                                        clickTrigger = {this.clickTrigger}></LogButton>
                                 </Card.Body>
                             </Card>
                         </Col> 

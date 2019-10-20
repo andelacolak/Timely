@@ -10,7 +10,5 @@ namespace TimelyServerApp.Viewmodels
         public string Name { get; set; }
 
         public string Note { get; set; }
-
-        public IEnumerable<string> TagNames { get; set; }
     }
 }
