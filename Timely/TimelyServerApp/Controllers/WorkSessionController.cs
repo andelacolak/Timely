@@ -38,5 +38,20 @@ namespace TimelyServerApp.Controllers
                 })
                 .ToList();
         }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] Entities.WorkSession workSession)
+        {
+            if (workSession == null)
+                return BadRequest("Project is null.");
+
+            _dataRepository.Add(workSession);
+
+            return CreatedAtRoute(
+                  "Get",
+                  new { workSession.Id },
+                  workSession);
+        }
+
     }
 }

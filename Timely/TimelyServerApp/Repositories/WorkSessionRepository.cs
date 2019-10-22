@@ -18,7 +18,8 @@ namespace TimelyServerApp.Repositories
 
         public void Add(WorkSession entity)
         {
-            throw new NotImplementedException();
+            _timelyDBContext.Add(entity);
+            _timelyDBContext.SaveChanges();
         }
 
         public void Delete(WorkSession entity)

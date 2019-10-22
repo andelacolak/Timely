@@ -26,8 +26,10 @@ namespace TimelyServerApp.Controllers
             IEnumerable<Project> projects = _dataRepository.GetAll()
                 .Select(x => new Project
                 {
+                    Id = x.Id,
                     Name = x.Name,
-                    Note = x.Note
+                    Note = x.Note,
+                    Active = x.WorkSessions.Any(y => y.EndDate == null)
                 });
             return Ok(projects);
         }
