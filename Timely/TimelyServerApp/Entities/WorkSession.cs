@@ -9,8 +9,6 @@ namespace TimelyServerApp.Entities
 {
     public class WorkSession
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public DateTime StartDate { get; set; }
