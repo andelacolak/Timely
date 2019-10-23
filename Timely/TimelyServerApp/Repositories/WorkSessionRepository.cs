@@ -7,7 +7,7 @@ using TimelyServerApp.Entities;
 
 namespace TimelyServerApp.Repositories
 {
-    public class WorkSessionRepository : IRepository<WorkSession>
+    public class WorkSessionRepository : IWorkSessionRepository
     {
         private readonly TimelyDBContext _timelyDBContext;
 
@@ -29,7 +29,14 @@ namespace TimelyServerApp.Repositories
 
         public WorkSession Get(int id)
         {
-            throw new NotImplementedException();
+            return _timelyDBContext.WorkSessions
+                .FirstOrDefault(x => x.Id == id);
+        }
+
+        public WorkSession GetActive(int projectId)
+        {
+            return _timelyDBContext.WorkSessions
+                .FirstOrDefault(x => x.ProjectId == projectId && x.EndDate == null);
         }
 
         public IQueryable<WorkSession> GetAll()
@@ -42,7 +49,10 @@ namespace TimelyServerApp.Repositories
 
         public void Update(WorkSession dbEntity, WorkSession entity)
         {
-            throw new NotImplementedException();
+            dbEntity.EndDate = entity.EndDate;
+            dbEntity.Description = entity.Description;
+
+            _timelyDBContext.SaveChanges();
         }
     }
 }

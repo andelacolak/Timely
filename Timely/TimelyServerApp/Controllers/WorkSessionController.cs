@@ -13,17 +13,17 @@ namespace TimelyServerApp.Controllers
     [ApiController]
     public class WorkSessionController : ControllerBase
     {
-        private readonly IRepository<Entities.WorkSession> _dataRepository;
+        private readonly IWorkSessionRepository _dataRepository;
 
-        public WorkSessionController(IRepository<Entities.WorkSession> dataRepository)
+        public WorkSessionController(IWorkSessionRepository dataRepository)
         {
             _dataRepository = dataRepository;
         }
 
         [HttpGet]
-        public IEnumerable<WorkSession> Get()
+        public IActionResult Get()
         {
-            return _dataRepository.GetAll()
+            var workSessions = _dataRepository.GetAll()
                 .Select(x => new WorkSession 
                 {
                     StartDate = x.StartDate,
@@ -37,15 +37,50 @@ namespace TimelyServerApp.Controllers
                     Tags = x.WorkSessionTags.Select(y => y.Tag.Name)
                 })
                 .ToList();
+
+            return Ok(workSessions);
+        }
+
+        [HttpGet]
+        [Route("getactive/{id}")]
+        public IActionResult GetActive(int id)
+        {
+            var workSession = _dataRepository.GetActive(id);
+
+            if (workSession == null)
+                return BadRequest("work session not found.");
+
+            return Ok( new WorkSession
+            {
+                Id = workSession.Id,
+                StartDate = workSession.StartDate
+            });
         }
 
         [HttpPost]
         public IActionResult Post([FromBody] Entities.WorkSession workSession)
         {
             if (workSession == null)
-                return BadRequest("Project is null.");
+                return BadRequest("work session is null.");
 
             _dataRepository.Add(workSession);
+
+            return CreatedAtRoute(
+                  "Get",
+                  new { workSession.Id },
+                  workSession);
+        }
+
+        [HttpPost]
+        [Route("update/{id}")]
+        public IActionResult Update(int id, [FromBody] Entities.WorkSession workSession)
+        {
+            if (workSession == null)
+                return BadRequest("work session is null.");
+
+            var oldWorkSession = _dataRepository.Get(workSession.Id);
+
+            _dataRepository.Update(oldWorkSession, workSession);
 
             return CreatedAtRoute(
                   "Get",
