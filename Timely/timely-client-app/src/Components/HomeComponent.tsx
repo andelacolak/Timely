@@ -8,7 +8,6 @@ import { WorkSession } from '../Models/WorkSession';
 import getCurrentDate from '../Helpers/DatetimeHelper';
 import * as moment from 'moment';
 
-
 interface IState {
     isLoading: boolean,
     projects: Array<Project>,
@@ -71,7 +70,10 @@ class HomeComponent extends React.Component<any, IState> {
         worksession!.endDate = getCurrentDate();
         axios.post(`${this.state.baseUri}/api/worksessions/update/${this.state.workSession!.id}`, worksession)
             .then(x => { 
-                this.setState({workSession: worksession, anyProjectActive: false, activeProjectId: 0});
+                this.setState({
+                    workSession: worksession, 
+                    anyProjectActive: false, 
+                    activeProjectId: 0});
             }).catch(error => console.log(error));
         this.hideModal();
         this.getProjects();
@@ -95,6 +97,7 @@ class HomeComponent extends React.Component<any, IState> {
 
     hideModal = () => {
         this.setState({showModal: false});
+        this.getProjects();
     }
 
     getHoursAndMinutes = () => {
