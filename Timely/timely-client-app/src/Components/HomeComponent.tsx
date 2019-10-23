@@ -3,10 +3,12 @@ import { Card, Container, Row, Col, Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../Assets/Styles/custom.css'
+import '../Assets/Styles/tags.css'
 import { Project } from '../Models/Project';
 import { WorkSession } from '../Models/WorkSession';
 import getCurrentDate from '../Helpers/DatetimeHelper';
 import * as moment from 'moment';
+import ReactTags from 'react-tag-autocomplete'
 
 interface IState {
     isLoading: boolean,
@@ -15,8 +17,18 @@ interface IState {
     workSession: WorkSession | null,
     showModal: boolean,
     activeProjectId: number,
-    baseUri: string
+    baseUri: string,
+    tags: Array<any>,
+    suggestions: Array<any>
 }
+
+const KeyCodes = {
+    comma: 188,
+    enter: 13,
+  };
+   
+const delimiters = [KeyCodes.comma, KeyCodes.enter];
+
 class HomeComponent extends React.Component<any, IState> {
     constructor( props : any ) {
         super(props)
@@ -27,8 +39,22 @@ class HomeComponent extends React.Component<any, IState> {
             activeProjectId: 0,
             workSession: null,
             showModal: false,
-            baseUri: "http://localhost:50430"
-        }
+            baseUri: "http://localhost:50430",
+            tags: [
+                { id: 1, name: "Apples" },
+                { id: 2, name: "Pears" }
+              ],
+              suggestions: [
+                { id: 3, name: "Bananas" },
+                { id: 4, name: "Mangos" },
+                { id: 5, name: "Lemons" },
+                { id: 6, name: "Apricots" }
+              ]
+        };
+
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleAddition = this.handleAddition.bind(this);
+        this.handleDrag = this.handleDrag.bind(this);
     }
 
     componentDidMount() {
@@ -115,6 +141,28 @@ class HomeComponent extends React.Component<any, IState> {
         this.setState({workSession: worksession});
     }
 
+    handleDelete(i: any) {
+        const { tags } = this.state;
+        this.setState({
+         tags: tags.filter((tag, index) => index !== i),
+        });
+    }
+ 
+    handleAddition(tag: any) {
+        this.setState(state => ({ tags: [...state.tags, tag] }));
+    }
+ 
+    handleDrag(tag: any, currPos: any, newPos: any) {
+        const tags = [...this.state.tags];
+        const newTags = tags.slice();
+ 
+        newTags.splice(currPos, 1);
+        newTags.splice(newPos, 0, tag);
+ 
+        // re-render
+        this.setState({ tags: newTags });
+    }
+
     render() {
         if (this.state.isLoading) {
             return null;
@@ -176,6 +224,18 @@ class HomeComponent extends React.Component<any, IState> {
                             id="description"
                             onChange = {(e) => this.onDescriptionChange(e.target.value)}
                         />
+                        <div id="app">
+                        <div>
+                        <ReactTags
+                            placeholder="Add tags"
+                            allowNew = {true}
+                            tags={this.state.tags}
+                            suggestions={this.state.suggestions}
+                            delimiters={delimiters}
+                            handleDelete={this.handleDelete}
+                            handleAddition={this.handleAddition}/>
+                        </div>
+                        </div>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={this.hideModal}>
