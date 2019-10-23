@@ -58,6 +58,7 @@ namespace TimelyServerApp.Controllers
         }
 
         [HttpPost]
+        [Route("post")]
         public IActionResult Post([FromBody] Entities.WorkSession workSession)
         {
             if (workSession == null)

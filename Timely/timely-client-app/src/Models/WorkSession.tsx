@@ -2,7 +2,7 @@ import { Project } from "./Project"
 
 export class WorkSession {
 
-    id: number | null
+    id: number
     startDate: string
     endDate: string | null
     description: string | null
@@ -11,7 +11,7 @@ export class WorkSession {
 
 constructor ( startDate: string, 
         projectId: number, 
-        id: number | null = null,
+        id: number = 0,
         endDate: string | null = null, 
         description: string | null = null , 
         tags: Array<string> | null = null){

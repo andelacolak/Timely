@@ -40,9 +40,11 @@ class HomeComponent extends React.Component<any, IState> {
             this.setState({ 
                 isLoading: false,
                 projects: projects.data, 
-                anyProjectActive: projects.data.some((x:any) => x.active)
+                anyProjectActive: projects.data.some((x:any) => x.active),
+                activeProjectId: projects.data.some((x:any) => x.active) ? projects.data.find((x:any) => x.active).id : 0
             });
         }).catch(error => console.log(error))
+        
     }
 
     getActiveWorkSession = () => {
@@ -53,31 +55,29 @@ class HomeComponent extends React.Component<any, IState> {
     }
 
     postWorkSession = (projectId: number) => {
-        let worksession = new WorkSession(getCurrentDate(), projectId);
-        
-        axios.post(`http://localhost:50430/api/worksessions`, worksession)
+        let worksession = new WorkSession(getCurrentDate(), projectId, 0);
+        console.log(projectId, worksession);
+        axios.post(`http://localhost:50430/api/worksessions/post`, worksession)
             .then(x => {
                 worksession.id = x.data.id;
-                this.setState({workSession: worksession});
+                this.setState({workSession: worksession, anyProjectActive: true, activeProjectId: projectId});
             }).catch(error => console.log(error));
     }
 
     updateWorkSession = () => {
-        let worksession = this.state.workSession;
-        worksession!.endDate = getCurrentDate();
-        this.setState({workSession: worksession});
+
 
         axios.post(`http://localhost:50430/api/worksessions/update/${this.state.workSession!.id}`, this.state.workSession)
             .then(x => {
-                console.log(x);
+                let worksession = this.state.workSession;
+                worksession!.endDate = getCurrentDate();
+                this.setState({workSession: worksession, anyProjectActive: false, activeProjectId: 0});
             }).catch(error => console.log(error));
-
         this.hideModal();
     }
 
     onLogClicked = (projectId: number) => {
-        let isAnyActive = this.state.projects.some(x => x.active)
-        if(isAnyActive) {
+        if(this.state.anyProjectActive) {
             this.setState({activeProjectId: projectId}, () => {
                 if(this.state.workSession === null) {
                     this.getActiveWorkSession();
@@ -93,7 +93,7 @@ class HomeComponent extends React.Component<any, IState> {
     }
 
     hideModal = () => {
-        this.setState({showModal: false});
+        this.setState({showModal: false, anyProjectActive: true});
     }
 
     getHoursAndMinutes = () => {
@@ -128,10 +128,13 @@ class HomeComponent extends React.Component<any, IState> {
                                     <Card.Text className="dark-text text-md">
                                         {project.note}
                                     </Card.Text>
+                                    {console.log(this.state.activeProjectId)}
                                     <Button key= {project.id} variant="outline-secondary" 
                                         className = "logButton"
                                         onClick = {() => this.onLogClicked(project.id)} 
-                                        disabled = {project.active ? false : this.state.anyProjectActive}>Log time</Button>
+                                        disabled = {this.state.anyProjectActive ?
+                                                this.state.activeProjectId === project.id ? false : true 
+                                            : false}>Log time</Button>
                                 </Card.Body>
                             </Card>
                         </Col> 
