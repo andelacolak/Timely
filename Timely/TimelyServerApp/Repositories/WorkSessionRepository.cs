@@ -24,7 +24,8 @@ namespace TimelyServerApp.Repositories
 
         public void Delete(WorkSession entity)
         {
-            throw new NotImplementedException();
+            _timelyDBContext.Remove(entity);
+            _timelyDBContext.SaveChanges();
         }
 
         public WorkSession Get(int id)

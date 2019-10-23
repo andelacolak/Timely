@@ -1,0 +1,14 @@
+h1, h1, h3, h4, h5 {
+    color: white;
+}
+
+.jumbotron {
+    background-color: #282c34;
+    height: 100vh;
+}
+
+.btn-center {
+    display: block;
+    margin: auto;
+}
+

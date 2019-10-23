@@ -5,3 +5,14 @@
 .text-md {
     font-size: 1rem;
 }
+
+.margin-bottom-xl {
+    margin-bottom: 50px;
+}
+.margin-bottom-md {
+    margin-bottom: 20px;
+}
+
+.not-bold {
+    font-weight: 100;
+}

@@ -15,7 +15,8 @@ interface IState {
     anyProjectActive: boolean,
     workSession: WorkSession | null,
     showModal: boolean,
-    activeProjectId: number
+    activeProjectId: number,
+    baseUri: string
 }
 class HomeComponent extends React.Component<any, IState> {
     constructor( props : any ) {
@@ -26,7 +27,8 @@ class HomeComponent extends React.Component<any, IState> {
             anyProjectActive: false,
             activeProjectId: 0,
             workSession: null,
-            showModal: false
+            showModal: false,
+            baseUri: "http://localhost:50430"
         }
     }
 
@@ -35,7 +37,7 @@ class HomeComponent extends React.Component<any, IState> {
     }
 
     getProjects = () => {
-        axios.get(`http://localhost:50430/api/projects`)
+        axios.get(`${this.state.baseUri}/api/projects`)
         .then(projects => {
             this.setState({ 
                 isLoading: false,
@@ -44,11 +46,10 @@ class HomeComponent extends React.Component<any, IState> {
                 activeProjectId: projects.data.some((x:any) => x.active) ? projects.data.find((x:any) => x.active).id : 0
             });
         }).catch(error => console.log(error))
-        
     }
 
     getActiveWorkSession = () => {
-        axios.get(`http://localhost:50430/api/worksessions/getactive/${this.state.activeProjectId}`)
+        axios.get(`${this.state.baseUri}/api/worksessions/getactive/${this.state.activeProjectId}`)
         .then(worksession => {
             this.setState({workSession: worksession.data});
         }).catch(error => console.log(error))
@@ -56,24 +57,24 @@ class HomeComponent extends React.Component<any, IState> {
 
     postWorkSession = (projectId: number) => {
         let worksession = new WorkSession(getCurrentDate(), projectId, 0);
-        console.log(projectId, worksession);
-        axios.post(`http://localhost:50430/api/worksessions/post`, worksession)
+        axios.post(`${this.state.baseUri}/api/worksessions/post`, worksession)
             .then(x => {
                 worksession.id = x.data.id;
                 this.setState({workSession: worksession, anyProjectActive: true, activeProjectId: projectId});
             }).catch(error => console.log(error));
+        
+        this.getProjects();
     }
 
     updateWorkSession = () => {
-
-
-        axios.post(`http://localhost:50430/api/worksessions/update/${this.state.workSession!.id}`, this.state.workSession)
-            .then(x => {
-                let worksession = this.state.workSession;
-                worksession!.endDate = getCurrentDate();
+        let worksession = this.state.workSession;
+        worksession!.endDate = getCurrentDate();
+        axios.post(`${this.state.baseUri}/api/worksessions/update/${this.state.workSession!.id}`, worksession)
+            .then(x => { 
                 this.setState({workSession: worksession, anyProjectActive: false, activeProjectId: 0});
             }).catch(error => console.log(error));
         this.hideModal();
+        this.getProjects();
     }
 
     onLogClicked = (projectId: number) => {
@@ -93,7 +94,7 @@ class HomeComponent extends React.Component<any, IState> {
     }
 
     hideModal = () => {
-        this.setState({showModal: false, anyProjectActive: true});
+        this.setState({showModal: false});
     }
 
     getHoursAndMinutes = () => {
@@ -128,13 +129,13 @@ class HomeComponent extends React.Component<any, IState> {
                                     <Card.Text className="dark-text text-md">
                                         {project.note}
                                     </Card.Text>
-                                    {console.log(this.state.activeProjectId)}
                                     <Button key= {project.id} variant="outline-secondary" 
                                         className = "logButton"
                                         onClick = {() => this.onLogClicked(project.id)} 
                                         disabled = {this.state.anyProjectActive ?
                                                 this.state.activeProjectId === project.id ? false : true 
                                             : false}>Log time</Button>
+                                    <Button variant="outline-secondary" href={`/list/${project.id}`} >Details</Button>
                                 </Card.Body>
                             </Card>
                         </Col> 

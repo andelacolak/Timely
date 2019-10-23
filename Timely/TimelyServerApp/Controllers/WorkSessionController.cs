@@ -24,17 +24,42 @@ namespace TimelyServerApp.Controllers
         public IActionResult Get()
         {
             var workSessions = _dataRepository.GetAll()
-                .Select(x => new WorkSession 
+                .Select(x => new WorkSession
                 {
+                    Id = x.Id,
                     StartDate = x.StartDate,
                     EndDate = x.EndDate,
                     Description = x.Description,
-                    Project = new Project 
-                    { 
+                    Project = new Project
+                    {
                         Name = x.Project.Name,
                         Note = x.Project.Note
-                    },
-                    Tags = x.WorkSessionTags.Select(y => y.Tag.Name)
+                    }
+                    //Tags = x.WorkSessionTags.Select(y => y.Tag.Name)
+                })
+                .ToList();
+
+            return Ok(workSessions);
+        }
+
+        [HttpGet]
+        [Route("{projectId}")]
+        public IActionResult Get(int projectId = 0)
+        {
+            var workSessions = _dataRepository.GetAll()
+                .Where(x => x.ProjectId == projectId)
+                .Select(x => new WorkSession
+                {
+                    Id = x.Id,
+                    StartDate = x.StartDate,
+                    EndDate = x.EndDate,
+                    Description = x.Description,
+                    Project = new Project
+                    {
+                        Name = x.Project.Name,
+                        Note = x.Project.Note
+                    }
+                    //Tags = x.WorkSessionTags.Select(y => y.Tag.Name)
                 })
                 .ToList();
 
@@ -50,7 +75,7 @@ namespace TimelyServerApp.Controllers
             if (workSession == null)
                 return BadRequest("work session not found.");
 
-            return Ok( new WorkSession
+            return Ok(new WorkSession
             {
                 Id = workSession.Id,
                 StartDate = workSession.StartDate
@@ -89,5 +114,17 @@ namespace TimelyServerApp.Controllers
                   workSession);
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            Entities.WorkSession project = _dataRepository.Get(id);
+
+            if (project == null)
+                return NotFound("The Employee record couldn't be found.");
+
+            _dataRepository.Delete(project);
+
+            return Ok();
+        }
     }
 }
