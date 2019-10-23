@@ -82,7 +82,6 @@ class HomeComponent extends React.Component<any, IState> {
             this.setState({
                 workSession: worksession.data
             });
-            console.log(worksession);
         }).catch(error => console.log(error))
     }
 
@@ -97,9 +96,15 @@ class HomeComponent extends React.Component<any, IState> {
         this.getProjects();
     }
 
+    postTags = () => {
+
+    }
+
     updateWorkSession = () => {
         let worksession = this.state.workSession;
         worksession!.endDate = getCurrentDate();
+        worksession!.tags = this.state.tags;
+
         axios.post(`${this.state.baseUri}/api/worksessions/update/${this.state.workSession!.id}`, worksession)
             .then(x => { 
                 this.setState({
