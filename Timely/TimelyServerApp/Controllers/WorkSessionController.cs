@@ -34,8 +34,12 @@ namespace TimelyServerApp.Controllers
                     {
                         Name = x.Project.Name,
                         Note = x.Project.Note
-                    }
-                    //Tags = x.WorkSessionTags.Select(y => y.Tag.Name)
+                    },
+                    Tags = x.WorkSessionTags.Select(y => new Tag
+                    {
+                        Id = y.TagId,
+                        Name = y.Tag.Name
+                    })
                 })
                 .ToList();
 
@@ -58,8 +62,12 @@ namespace TimelyServerApp.Controllers
                     {
                         Name = x.Project.Name,
                         Note = x.Project.Note
-                    }
-                    //Tags = x.WorkSessionTags.Select(y => y.Tag.Name)
+                    },
+                    Tags = x.WorkSessionTags.Select(y => new Tag
+                    {
+                        Id = y.TagId,
+                        Name = y.Tag.Name
+                    })
                 })
                 .ToList();
 
@@ -78,7 +86,12 @@ namespace TimelyServerApp.Controllers
             return Ok(new WorkSession
             {
                 Id = workSession.Id,
-                StartDate = workSession.StartDate
+                StartDate = workSession.StartDate,
+                Tags = workSession.WorkSessionTags.Select(x => new Tag 
+                {
+                    Id = x.Tag.Id,
+                    Name = x.Tag.Name
+                })
             });
         }
 

@@ -40,16 +40,8 @@ class HomeComponent extends React.Component<any, IState> {
             workSession: null,
             showModal: false,
             baseUri: "http://localhost:50430",
-            tags: [
-                { id: 1, name: "Apples" },
-                { id: 2, name: "Pears" }
-              ],
-              suggestions: [
-                { id: 3, name: "Bananas" },
-                { id: 4, name: "Mangos" },
-                { id: 5, name: "Lemons" },
-                { id: 6, name: "Apricots" }
-              ]
+            tags: [],
+            suggestions: []
         };
 
         this.handleDelete = this.handleDelete.bind(this);
@@ -59,6 +51,17 @@ class HomeComponent extends React.Component<any, IState> {
 
     componentDidMount() {
         this.getProjects();
+        this.getTags();
+    }
+
+    getTags = () => {
+        axios.get(`${this.state.baseUri}/api/tags`)
+        .then(tags => {
+            this.setState({ 
+                suggestions: tags.data
+            });
+            console.log(tags);
+        }).catch(error => console.log(error))
     }
 
     getProjects = () => {
@@ -76,7 +79,10 @@ class HomeComponent extends React.Component<any, IState> {
     getActiveWorkSession = () => {
         axios.get(`${this.state.baseUri}/api/worksessions/getactive/${this.state.activeProjectId}`)
         .then(worksession => {
-            this.setState({workSession: worksession.data});
+            this.setState({
+                workSession: worksession.data
+            });
+            console.log(worksession);
         }).catch(error => console.log(error))
     }
 

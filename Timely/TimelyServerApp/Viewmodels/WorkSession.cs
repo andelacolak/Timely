@@ -17,6 +17,6 @@ namespace TimelyServerApp.Viewmodels
 
         public Project Project { get; set; }
 
-        public IEnumerable<string> Tags { get; set; }
+        public IEnumerable<Tag> Tags { get; set; }
     }
 }

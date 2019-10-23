@@ -34,6 +34,7 @@ namespace TimelyServerApp
 
             services.AddScoped<IRepository<Project>, ProjectRepository>();
             services.AddScoped<IWorkSessionRepository, WorkSessionRepository>();
+            services.AddScoped<IRepository<Tag>, TagRepository>();
 
             services.AddCors(options =>
             {

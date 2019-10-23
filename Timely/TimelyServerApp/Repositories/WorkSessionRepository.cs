@@ -37,6 +37,8 @@ namespace TimelyServerApp.Repositories
         public WorkSession GetActive(int projectId)
         {
             return _timelyDBContext.WorkSessions
+                .Include(x => x.WorkSessionTags)
+                    .ThenInclude(x => x.Tag)
                 .FirstOrDefault(x => x.ProjectId == projectId && x.EndDate == null);
         }
 
