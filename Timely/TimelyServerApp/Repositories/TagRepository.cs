@@ -17,7 +17,7 @@ namespace TimelyServerApp.Repositories
 
         public void Add(Tag entity)
         {
-            throw new NotImplementedException();
+            _timelyDBContext.Add(entity);
         }
 
         public void Delete(Tag entity)

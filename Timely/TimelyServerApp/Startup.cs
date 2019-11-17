@@ -41,7 +41,7 @@ namespace TimelyServerApp
                 options.AddPolicy(AllowSpecificOrigins,
                 builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000")
+                    builder.WithOrigins("*" )
                                         .AllowAnyHeader()
                                         .AllowAnyMethod();
                 });

@@ -13,23 +13,41 @@ namespace TimelyServerApp.Controllers
     [ApiController]
     public class TagController : ControllerBase
     {
-        private readonly IRepository<Entities.Tag> _dataRepository;
+        private readonly IRepository<Entities.Tag> _tagRepository;
 
-        public TagController(IRepository<Entities.Tag> dataRepository)
+        private readonly IRepository<Entities.WorkSessionTag> _workSessionTagRepository;
+
+        public TagController(IRepository<Entities.Tag> tagRepository, IRepository<Entities.WorkSessionTag> workSessionTagRepository)
         {
-            _dataRepository = dataRepository;
+            _tagRepository = tagRepository;
+            _workSessionTagRepository = workSessionTagRepository;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            IEnumerable<Tag> tags = _dataRepository.GetAll()
+            IEnumerable<Tag> tags = _tagRepository.GetAll()
                 .Select(x => new Tag
                 {
                     Id = x.Id,
                     Name = x.Name
                 });
             return Ok(tags);
+        }
+
+        [HttpPost]
+        public IActionResult Post(Tag tag, bool alreadyExists = false) 
+        {
+            //if (!alreadyExists) 
+            //    _tagRepository.Add(new Entities.Tag { Id = tag.Id, Name = tag.Name });
+
+            //_workSessionTagRepository.Add(
+            //    new Entities.WorkSessionTag
+            //    {
+            //        TagId = tag.Id,
+
+            //    });
+            return Ok();
         }
     }
 }

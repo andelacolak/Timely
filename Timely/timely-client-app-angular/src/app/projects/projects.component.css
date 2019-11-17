@@ -1,0 +1,10 @@
+.project-container {
+    display: inline-block;
+    padding: 10px;
+}
+
+.jumbotron {
+    background-color: white;
+    width: 70%;
+    margin: auto;
+}

@@ -1,0 +1,19 @@
+<div class="jumbotron float-md-center">
+    <h1>Timely</h1>
+    <hr>
+    <div *ngFor="let project of projects" class="project-container">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{project.name}}</h5>
+                <p class="card-text">{{project.note}}</p>
+                <a href="#" class="btn btn-outline-success" 
+                    (click)="onLogClicked(project)" 
+                    [class.disabled]="isAnyProjectActive() && !project.active">
+                    <span style="padding: 5px;">Log work</span>
+                    <fa-icon *ngIf="project.active === true" [icon]="faStop"></fa-icon>
+                    <fa-icon *ngIf="project.active === false" [icon]="faPlay"></fa-icon>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

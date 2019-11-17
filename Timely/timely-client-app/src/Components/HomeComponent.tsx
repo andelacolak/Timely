@@ -112,6 +112,10 @@ class HomeComponent extends React.Component<any, IState> {
                     anyProjectActive: false, 
                     activeProjectId: 0});
             }).catch(error => console.log(error));
+
+        worksession!.tags.map(tag => {
+            if(this.state.suggestions.indexof(tag) != -1)
+        })
         this.hideModal();
         this.getProjects();
     }
